@@ -351,6 +351,22 @@ def import_issues_golden_comet(issues):
 		issue_migration = {}
 		new_issue = {}
 		new_issue['title'] = issue['title']
+
+		#Add custom title prefix?
+		if config.has_option('format', 'issue_title_prefix'):
+			new_issue['title'] = config.get('format', 'issue_title_prefix') + " " + issue['title']
+
+		#Add new label
+		if config.has_option('format', 'issue_label'):
+			new_lable = {
+				"name": config.get('format', 'issue_label'),
+				"color": '000000' #Default to black, easy to find and can be changed globally later
+			}	
+			if 'labels' in issue:
+				issue['labels'].append(new_lable)
+			else:
+				issue['labels'] = [new_lable]
+
 		if issue['closed_at'] is not None:
 			new_issue['closed_at'] = issue['closed_at']
 			new_issue['closed'] = True
